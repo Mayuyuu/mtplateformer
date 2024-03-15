@@ -14,6 +14,12 @@ public class PlayerGameplay : MonoBehaviour
     private float AlphaLerpDelay;
     private float InteractionDelay;
     //--------------------------------------------------------------------------------
+
+
+    //--------------------------------------------------------------------- Glitch Bar
+    [SerializeField] private GlitchBar maBar;
+    [SerializeField] private float incGlitch;
+    //--------------------------------------------------------------------------------
     
     void Start()
     {
@@ -30,8 +36,19 @@ public class PlayerGameplay : MonoBehaviour
             
         }
         
-       
-        
+
+        //Debug pour tester l'augmentation du glitch. A mettre ailleur BWAAAA !!
+        if(Input.GetKeyDown(KeyCode.O)) 
+        {
+            //Augmenter le glitch
+            maBar.GlitchPower = maBar.GlitchPower + incGlitch;
+        }
+
+        //A mettre dans un autre script (un gamemanager par exemple). BWAAAA !!
+        if (maBar.GlitchPower >= 1)
+        {
+            //Mettre un écran de défaite ou charger scène (activer le gameObject qui a l'écran de défaite)
+        }
     }
 
 
@@ -72,10 +89,10 @@ public class PlayerGameplay : MonoBehaviour
                 InteractionDelay = Mathf.Lerp(DurationMinPS, DurationMaxPS, AlphaLerpDelay);        //On determine le temps que mets la SW à atteindre la plateforme grace à l'Alpha Lerp et donc la distance player -> Plateforme
                 yield return new WaitForSeconds(InteractionDelay);      //On attend et on lance l'effet voulu
                 coll.gameObject.GetComponent<SpriteRenderer>().sprite = RevealSprite; //Changer le sprite des plateformes par celui voulu (à définir directement dans l'inspecteur du player)
-              
+               //mettre ligne pr changer le material coll.gameObject.GetComponent<SpriteRenderer>().material
         }
 
-            else if (coll.gameObject.CompareTag("DestructPlateform"))       //Si le go contenant le coll a le tag "Destruct" : on le detruit
+        else if (coll.gameObject.CompareTag("DestructPlateform"))       //Si le go contenant le coll a le tag "Destruct" : on le detruit
             {
                 AlphaLerpDelay = ((gameObject.transform.position - coll.gameObject.transform.position).magnitude) / RangeSW;
                 InteractionDelay = Mathf.Lerp(DurationMinPS, DurationMaxPS, AlphaLerpDelay);
